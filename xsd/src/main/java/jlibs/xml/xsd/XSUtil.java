@@ -73,16 +73,20 @@ public class XSUtil{
         List<XSComplexTypeDefinition> subTypes = new ArrayList<XSComplexTypeDefinition>();
         XSNamedMap namedMap = xsModel.getComponents(XSConstants.TYPE_DEFINITION);
         XSObject anyType = namedMap.itemByName(Namespaces.URI_XSD, "anyType");
+        XSObject anySimpleType = namedMap.itemByName(Namespaces.URI_XSD, "anySimpleType");
         for(int i=0; i<namedMap.getLength(); i++){
             XSObject item = namedMap.item(i);
             if(item instanceof XSComplexTypeDefinition){
                 XSComplexTypeDefinition complexItem = (XSComplexTypeDefinition)item;
                 if(!complexItem.getAbstract()){
-                    do{
-                        complexItem = (XSComplexTypeDefinition)complexItem.getBaseType();
-                    }while(complexItem!=anyType && complexItem!=complexType);
-                    if(complexItem==complexType)
-                        subTypes.add((XSComplexTypeDefinition)item);
+                    XSTypeDefinition baseType = complexItem;
+                    do {
+                        baseType = baseType.getBaseType();
+                    } while (baseType!=anyType
+                                && baseType!=anySimpleType
+                                && baseType!=complexType);
+                    if(baseType==complexType)
+                        subTypes.add(complexItem);
                 }
             }
         }
