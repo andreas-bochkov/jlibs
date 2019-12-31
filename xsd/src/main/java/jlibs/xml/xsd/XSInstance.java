@@ -679,15 +679,15 @@ public class XSInstance{
                 // NOTE: min/max facets can have fractional part even though fractionDigits is zero
                 Long min = null;
                 if(minInclusive!=null)
-                    min = Long.parseLong(minInclusive);
+                    min = Long.parseLong(minInclusive.replaceFirst("\\..*$",""));
                 if(minExclusive!=null)
-                    min = Long.parseLong(minExclusive)+1;
+                    min = Long.parseLong(minExclusive.replaceFirst("\\..*$",""))+1;
 
                 Long max = null;
                 if(maxInclusive!=null)
-                    max = Long.parseLong(maxInclusive);
+                    max = Long.parseLong(maxInclusive.replaceFirst("\\..*$",""));
                 if(maxExclusive!=null)
-                    max = Long.parseLong(maxExclusive)-1;
+                    max = Long.parseLong(maxExclusive.replaceFirst("\\..*$",""))-1;
 
                 if(min==null && max==null){
                     min = -1000L;
